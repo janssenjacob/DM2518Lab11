@@ -1,81 +1,119 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Lab 1</title>
-    <meta name="Labbar" content="initial-scale=1.0">
-    <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="styling.css">
-  </head>
-  <body>
-    <center><h1>This is a progressive web app</h1></center>
-    <hr/>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="styling.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+
+  <title>Lab 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+
+</head>
+
+<body>
+  <div id="container">
     <div id="map"></div>
-    <script>
-      var map;
-      var zoom = 11;
-       function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-           center: {lat: 59.347, lng: 18.065},
-           disableDefaultUI: true,
-           zoom: zoom
-          });
-          // Tilt 45°
-        map.setTilt(45);
-        }
+    <div class="container-fluid">
+      <div class="text-right" style="padding: 5px 100px 50px 0px;">
+        <div class="d-inline-block">
+        <button onclick="zoomIn()">Zoom In</button>
+        <button onclick="zoomOut()">Zoom Out</button>
+      </div></div>
 
-      // Function for zooming in
-      function zoomIn() {
-        map.setZoom(map.getZoom() + 1);
-      }
-      // Function for zooming out
-      function zoomOut() {
-        map.setZoom(map.getZoom() - 1);
-      }
-
-      // Panning
-      function panNorth() {
-        map.panBy(0, -100);
-      }
-      function panEast() {
-        map.panBy(100, 0);
-      }
-      function panSouth() {
-        map.panBy(0, 100);
-      }
-      function panWest() {
-        map.panBy(-100, 0);
-      }
-
-      const $icon = document.querySelector('.icon');
-      const $arrow = document.querySelector('.arrow');
+      <div class="text-center">
+        <div class="d-inline-block icon">
+          <div id="panNorthBtn" class="arrow arrow-rotated270"></div>
+        </div></div>
       
-      $icon.onclick = () => {
-        $arrow.animate([
-          {left: '0'},
-          {left: '10px'},
-          {left: '0'}
-        ],{
-          duration: 700,
-          iterations: Infinity
-        });
-      }
-        
-      </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTCWRUE-JSL03qDjSDWLJFoTjigxdLQRA&callback=initMap"
-    async defer></script>
-      
-    <div class="icon">
-      <div class="arrow"></div>
+      <div class="text-center">
+        <div class="d-inline-block icon">
+          <div id="panWestBtn" class="arrow arrow-rotated180"></div>
+        </div>
+        <div class="d-inline-block icon">
+          <div id="panEastBtn" class="arrow"></div>
+        </div>
+      </div>
+      <div class="text-center">
+        <div class="d-inline-block icon">
+          <div id="panSouthBtn" class="arrow arrow-rotated90">
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div id=control>
-      <button onclick="zoomIn()">Zoom In</button>
-      <button onclick="zoomOut()">Zoom Out</button>
-      <button onclick="panNorth()">Pan North</button>
-      <button onclick="panEast()">Pan East</button>
-      <button onclick="panSouth()">Pan South</button>
-      <button onclick="panWest()">Pan West</button>
-    </div> 
+  <script>
+    var map;
+    var zoom = 11;
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: 59.347, lng: 18.065 },
+        disableDefaultUI: true,
+        zoom: zoom,
+        tilt: 45
 
-  </body>
+      });
+    }
+
+    // Function for zooming in
+    function zoomIn() {
+      map.setZoom(map.getZoom() + 1);
+    }
+    // Function for zooming out
+    function zoomOut() {
+      map.setZoom(map.getZoom() - 1);
+    }
+
+    // Panning
+    function panNorth() {
+      map.panBy(0, -100);
+    }
+    function panEast() {
+      map.panBy(100, 0);
+    }
+    function panSouth() {
+      map.panBy(0, 100);
+    }
+    function panWest() {
+      map.panBy(-100, 0);
+    }
+
+    const $icon = document.querySelector('.icon');
+    const $arrow = document.querySelector('.arrow');
+
+    $(document).ready(function () {
+      $("#panWestBtn").on("click", function () {
+        panWest();
+      });
+      $("#panEastBtn").on("click", function () {
+        panEast();
+      });
+      $("#panNorthBtn").on("click", function () {
+        panNorth();
+      });
+      $("#panSouthBtn").on("click", function () {
+        panSouth();
+      });
+    });
+
+  </script>
+
+  <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTCWRUE-JSL03qDjSDWLJFoTjigxdLQRA&callback=initMap"
+    async defer></script>-->
+  <script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+
+</body>
+
 </html>

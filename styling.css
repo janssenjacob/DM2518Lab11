@@ -1,22 +1,24 @@
 /* Always set the map height explicitly to define the size of the div
  * element that contains the map. */
 #map {
- height: 60%;
+ height: 400px;
 }
+
 /* Optional: Makes the sample page fill the window. */
 html, body {
   height: 100%;
   margin: 0;
-  padding: 0;
+  padding: 0 !important;
 }
 body {
-    background-color: #00b894;
+    background-color: #00b894 !important;
     margin: 0;
     padding: 0;
   }
   
   .icon {
-    position: absolute;
+    /* position: absolute; */
+    
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
@@ -26,7 +28,7 @@ body {
   }
   
   .arrow {
-    position: absolute;
+    /* position: absolute; */
     top: 25px;
     width: 90%;
     height: 10px;
@@ -54,3 +56,18 @@ body {
     box-shadow: 0 3px 5px rgba(0, 0, 0, .2);
     transform: rotate(-45deg);
   }
+  .arrow-rotated180 {
+    transform: rotate(180deg);  
+  }
+  .arrow-rotated90 {
+    transform: rotate(90deg);
+    -moz-transform: scaleX(90deg);
+    -webkit-transform: scaleX(90deg);
+    -ms-transform: scaleX(90deg);
+  }
+  .arrow-rotated270 {
+    transform: rotate(-90deg);
+    -webkit-transform: scaleX(-90deg);
+  }
+ 
+  
