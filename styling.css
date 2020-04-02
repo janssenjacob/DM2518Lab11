@@ -1,7 +1,7 @@
-/* Always set the map height explicitly to define the size of the div
- * element that contains the map. */
-#map {
- height: 400px;
+ /* Set the size of the div element that contains the map */
+ #map {
+    height: 400px; /* The height is 400 pixels */
+    width: 100%; /* The width is the width of the web page */
 }
 
 /* Optional: Makes the sample page fill the window. */
@@ -15,10 +15,9 @@ body {
     margin: 0;
     padding: 0;
   }
-  
+
+  /* Control arrows */
   .icon {
-    /* position: absolute; */
-    
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
@@ -28,7 +27,6 @@ body {
   }
   
   .arrow {
-    /* position: absolute; */
     top: 25px;
     width: 90%;
     height: 10px;
@@ -69,5 +67,8 @@ body {
     transform: rotate(-90deg);
     -webkit-transform: scaleX(-90deg);
   }
+
+
+
  
   
