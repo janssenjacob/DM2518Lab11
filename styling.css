@@ -16,6 +16,10 @@ body {
     padding: 0;
   }
 
+  .goFS {
+    padding: 10px;
+  }
+
   /* Control arrows */
   .icon {
     top: 50%;
