@@ -30,8 +30,8 @@
         <!--The div element for the map -->
         <div id="map"></div>
         <div class="text-right mr-2 mt-2">
-            <div class="d-inline-block">
-                <button class="btn btn-light" onclick="zoomIn()">Zoom In</button>
+            <div class="btn-group-vertical">
+                <button class="btn btn-light mb-2" onclick="zoomIn()">Zoom In</button>
                 <button class="btn btn-light" onclick="zoomOut()">Zoom Out</button>
             </div>
         </div>
@@ -149,7 +149,9 @@
                 map.setZoom(map.getZoom() - 1);
             }
 
-            // Panning
+            /**
+             * Panning functions.
+             */
             function panNorth() {
                 map.panBy(0, -100);
             }
@@ -181,12 +183,21 @@
                 });
             });
 
-            // Go fullscreen
+            /**
+             * Hide fullscreen button if webapp launched from homescreen.
+             */
+            if(navigator.standalone == true) {
+                document.getElementById("goFS").style.visibility = "hidden";
+            }
+
+            /**
+             * Go fullscreen function.
+             */
             var goFS = document.getElementById("goFS");
                 goFS.addEventListener("click", function () {
                     if (goFS.innerHTML == "Go fullscreen") {
                         goFS.innerHTML = "Exit fullscreen";
-                        document.body.requestFullscreen();
+                        document.documentElement.requestFullscreen();
                     } else {
                         goFS.innerHTML = "Go fullscreen";
                         document.exitFullscreen();
