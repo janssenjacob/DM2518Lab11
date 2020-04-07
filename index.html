@@ -25,6 +25,7 @@
                 <h1 class="display-4" style="color: white;">Lab 1 Demo</h1>
                 <!-- Toggle button for fullscreen -->
                 <button id="goFS" class="btn btn-light mb-2">Go fullscreen</button>
+                <button id="installButton" class="btn btn-light mb-2">Install webapp</button>
             </div>
         </div>
         <!--The div element for the map -->
@@ -216,6 +217,22 @@
                     deferredPrompt = e;
                     // Update UI notify the user they can install the PWA
                     showInstallPromotion();
+                });
+
+                var buttonInstall = document.getElementById("installButton");
+                buttonInstall.addEventListener('click', (e) => {
+                    // Hide the app provided install promotion
+                    hideMyInstallPromotion();
+                    // Show the install prompt
+                    deferredPrompt.prompt();
+                    // Wait for the user to respond to the prompt
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('User accepted the install prompt');
+                        } else {
+                            console.log('User dismissed the install prompt');
+                        }
+                    })
                 });
 
 
