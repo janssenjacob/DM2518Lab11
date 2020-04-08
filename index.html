@@ -41,9 +41,9 @@
 
             <div class="ml-2 mt-2 btn-group-vertical">
                 <p class="h4" style="color: white">Pin it!</p>
-                    <input class="mb-2" id="pinState" type="checkbox" data-toggle="toggle">
+                <input class="mb-2" id="pinState" type="checkbox" data-toggle="toggle">
                 <p class="h4" style="color: white">Stop tracker</p>
-                    <input type="checkbox" id="trackerState">
+                <input type="checkbox" id="trackerState">
                 <button class="btn btn-light mt-4" onclick="pinnedPlaces()">My Locations</button>
             </div>
 
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-       
+
 
 
         <div class="text-center">
@@ -79,7 +79,17 @@
                 </div>
             </div>
         </div>
+        <div class="text-right mr-2 mt-2">
+            <div class="btn-group-horizontal text-center">
+                <button class="btn btn-light mr-1" onclick="setSatellite()">Satellite</button>
+                <button class="btn btn-light mr-1" onclick="setRoad()">Road</button>
+                <button class="btn btn-light mr-1" onclick="setTerrain()">Terrain</button>
+                <button class="btn btn-light" onclick="setHybrid()">Hybrid</button>
+            </div>
+        </div>
     </div>
+    
+
 
 
 
