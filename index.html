@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -38,6 +38,18 @@
             </div>
         </div>
 
+        <div id="sidebar" class="col-0">
+            <div class="row">
+                <h3><span class="glyphicon glyphicon-map-marker"></span></h3>
+            </div>
+            <p style="margin-top: .5em;">
+                <button type="submit" class="btn btn-warning" id="startPinning"> Pin a place
+                <span class="glyphicon glyphicon-pushpin"></button>
+                <button type="submit" class="btn btn-danger" id="stopTracking"> Stop tracking </button>
+                <span id="btn"></span>
+            </p>
+        </div>
+
         <div class="text-center">
             <div class="d-inline-block icon">
                 <div id="panNorthBtn" class="arrow arrow-rotated270"></div>
@@ -67,6 +79,7 @@
             </div>
         </div>
     </div>
+
 
 
     <script>var origo, map, infoWindow;
@@ -102,8 +115,10 @@
                     infoWindow.setContent('Your location.');
                     infoWindow.open(map);
                     map.setCenter(pos);
+
                 }, function () {
-                    handleLocationError(true, infoWindow, map.getCenter());
+                        handleLocationError(true, infoWindow, map.getCenter());
+      
                 });
             } else {
                 /* If Browser doesn't support Geolocation */
@@ -119,40 +134,57 @@
                 infoWindow.open(map);
             }
 
-
+            startPinning.addEventListener('click', function () {
+                google.maps.event.addListener(map, 'click',
+                    function (event) {
+                        pos = {
+                            lat: event.latLng.lat(),
+                            lng: event.latLng.lng()
+                        }
+                        addMarker(pos)
+                    });
+            });
             /* Listen for click on map to create a marker */
-            google.maps.event.addListener(map, 'click',
-                function (event) {
-                    pos = {
-                        lat: event.latLng.lat(),
-                        lng: event.latLng.lng()
-                    }
-                    addMarker(pos)
-                });
+          
 
-
+        };
+        
+        
+            
             /* Adding marker */
-            function addMarker(position) {
-                var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
-                /* var image = 'https://img.icons8.com/color/96/000000/marker.png'; */
-                var content = '<h1>Annas crib</h1>';
-                var beachMarker = new google.maps.Marker({ position, map, icon: image });
-                var infoWindow = new google.maps.InfoWindow({ content });
+        function addMarker(position) {
+            var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+            /* var image = 'https://img.icons8.com/color/96/000000/marker.png'; */
+            var content = '<h1>Annas crib</h1>';
+            var beachMarker = new google.maps.Marker({ position, map, icon: image });
+            var infoWindow = new google.maps.InfoWindow({ content });
 
-                beachMarker.addListener('click', function () {
-                    infoWindow.open(map, beachMarker);
-                });
+              
+            beachMarker.addListener('click', function () {
+                infoWindow.open(map, beachMarker);
+            });
 
-                /* Checks for custom icon */
-                if (props.icon) {
-                    marker.setimage(props.icon)
-                };
-
+            /* Checks for custom icon */
+            if (props.icon) {
+                marker.setimage(props.icon)
             }
-        }
+        };
+        
 
         /* Locations */
         /* Annas crib = { lat: 59.353810, lng: 18.088570 }; */
+
+
+        // Function for zooming in
+        function zoomIn() {
+            map.setZoom(map.getZoom() + 1);
+        }
+        // Function for zooming out
+        function zoomOut() {
+            map.setZoom(map.getZoom() - 1);
+        }
+
+
 
         // Function for zooming in
         function zoomIn() {
@@ -174,6 +206,7 @@
         function setHybrid() {
             map.setMapTypeId('hybrid');
         }
+
         /**
          * Panning functions.
          */
@@ -208,6 +241,17 @@
             });
         });
 
+
+        /**
+         * Hide fullscreen button if webapp launched from homescreen.
+         */
+        if (navigator.standalone == true) {
+            document.getElementById("goFS").style.visibility = "hidden";
+        }
+
+        /**
+
+
         /**
          * Hide fullscreen button if webapp launched from homescreen.
          */
@@ -217,6 +261,7 @@
         }
 
         /**
+
          * Go fullscreen function.
          */
         var goFS = document.getElementById("goFS");
@@ -231,14 +276,31 @@
         }, false);
 
         /**
-         * Check if installment is available.
+
+         *
          */
         let deferredPrompt;
+
+
+         /* Check if installment is available.
+         */
+        let deferredPrompt;
+
         window.addEventListener('beforeinstallprompt', (e) => {
             // Prevent the mini-infobar from appearing on mobile
             e.preventDefault();
             // Stash the event so it can be triggered later.
             deferredPrompt = e;
+
+            // Update UI notify the user they can install the PWA
+            showInstallPromotion();
+        });
+
+        var buttonInstall = document.getElementById("installButton");
+        buttonInstall.addEventListener('click', (e) => {
+            // Hide the app provided install promotion
+            hideMyInstallPromotion();
+
             if (deferredPrompt) {
                 document.getElementById("installButton").visibility = "visible";
             }
@@ -248,6 +310,7 @@
          */
         var buttonInstall = document.getElementById("installButton");
         buttonInstall.addEventListener('click', (e) => {
+
             // Show the install prompt
             deferredPrompt.prompt();
             // Wait for the user to respond to the prompt
@@ -258,10 +321,14 @@
                     console.log('User dismissed the install prompt');
                 }
             })
+
+        });</script>
+
         });
 
 
     </script>
+
 
     <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads
@@ -270,16 +337,21 @@
     -->
     <!--Bootstrap scripts-->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
 
     <script async defer
+
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBURtwO1YHtI9FvJ_Yno8ULXXaL8XRckJM&callback=initMap"></script>
+
+
+
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBURtwO1YHtI9FvJ_Yno8ULXXaL8XRckJM&callback=initMap"></script>
     <script src="./app.js"></script>
 
