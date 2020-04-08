@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
 
     <link rel="stylesheet" type="text/css" href="styling.css">
+    <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
@@ -69,6 +70,14 @@
                 </div>
             </div>
         </div>
+        <div class="text-right mr-2 mt-2">
+            <div class="btn-group-horizontal text-center">
+                <button class="btn btn-light mr-1" onclick="setSatellite()">Satellite</button>
+                <button class="btn btn-light mr-1" onclick="setRoad()">Road</button>
+                <button class="btn btn-light mr-1" onclick="setTerrain()">Terrain</button>
+                <button class="btn btn-light" onclick="setHybrid()">Hybrid</button>
+            </div>
+        </div>
     </div>
 
 
@@ -84,7 +93,11 @@
 
             /* Creating the map */
             map = new google.maps.Map(
-                document.getElementById('map'), { zoom: 11, center: origo });
+                document.getElementById('map'), {
+                zoom: 11,
+                center: origo,
+                disableDefaultUI: true
+            });
 
             /* Creating infoWindow */
             infoWindow = new google.maps.InfoWindow;
@@ -161,6 +174,7 @@
         /* Locations */
         /* Annas crib = { lat: 59.353810, lng: 18.088570 }; */
 
+
         // Function for zooming in
         function zoomIn() {
             map.setZoom(map.getZoom() + 1);
@@ -168,6 +182,29 @@
         // Function for zooming out
         function zoomOut() {
             map.setZoom(map.getZoom() - 1);
+        }
+
+
+
+        // Function for zooming in
+        function zoomIn() {
+            map.setZoom(map.getZoom() + 1);
+        }
+        // Function for zooming out
+        function zoomOut() {
+            map.setZoom(map.getZoom() - 1);
+        }
+        function setSatellite() {
+            map.setMapTypeId('satellite');
+        }
+        function setRoad() {
+            map.setMapTypeId('roadmap');
+        }
+        function setTerrain() {
+            map.setMapTypeId('terrain');
+        }
+        function setHybrid() {
+            map.setMapTypeId('hybrid');
         }
 
         /**
@@ -204,6 +241,7 @@
             });
         });
 
+
         /**
          * Hide fullscreen button if webapp launched from homescreen.
          */
@@ -212,6 +250,18 @@
         }
 
         /**
+
+
+        /**
+         * Hide fullscreen button if webapp launched from homescreen.
+         */
+        if (navigator.standalone == true) {
+            document.getElementById("goFS").style.visibility = "hidden";
+            document.getElementById("installButton").style.visibility = "hidden";
+        }
+
+        /**
+
          * Go fullscreen function.
          */
         var goFS = document.getElementById("goFS");
@@ -226,7 +276,13 @@
         }, false);
 
         /**
+
          *
+         */
+        let deferredPrompt;
+
+
+         /* Check if installment is available.
          */
         let deferredPrompt;
 
@@ -235,6 +291,7 @@
             e.preventDefault();
             // Stash the event so it can be triggered later.
             deferredPrompt = e;
+
             // Update UI notify the user they can install the PWA
             showInstallPromotion();
         });
@@ -243,6 +300,17 @@
         buttonInstall.addEventListener('click', (e) => {
             // Hide the app provided install promotion
             hideMyInstallPromotion();
+
+            if (deferredPrompt) {
+                document.getElementById("installButton").visibility = "visible";
+            }
+        });
+        /**
+         * Install webapp if installButton is clicked.
+         */
+        var buttonInstall = document.getElementById("installButton");
+        buttonInstall.addEventListener('click', (e) => {
+
             // Show the install prompt
             deferredPrompt.prompt();
             // Wait for the user to respond to the prompt
@@ -253,7 +321,14 @@
                     console.log('User dismissed the install prompt');
                 }
             })
+
         });</script>
+
+        });
+
+
+    </script>
+
 
     <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads
@@ -272,8 +347,13 @@
             crossorigin="anonymous"></script>
 
     <script async defer
+
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBURtwO1YHtI9FvJ_Yno8ULXXaL8XRckJM&callback=initMap"></script>
 
+
+
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBURtwO1YHtI9FvJ_Yno8ULXXaL8XRckJM&callback=initMap"></script>
+    <script src="./app.js"></script>
 
 </body>
 
