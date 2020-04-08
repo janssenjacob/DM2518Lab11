@@ -42,7 +42,7 @@
             <div class="ml-2 mt-2 btn-group-vertical">
                 <p class="h4" style="color: white">Pin it!</p>
                     <input class="mb-2" id="pinState" type="checkbox" data-toggle="toggle">
-                <p class="h4" checked style="color: white">Stop tracker</p>
+                <p class="h4" style="color: white">Stop tracker</p>
                     <input type="checkbox" id="trackerState">
                 <button class="btn btn-light mt-4" onclick="pinnedPlaces()">My Locations</button>
             </div>
@@ -224,37 +224,9 @@
                     addMarker(pos)
                 });
 
-
-            /* Adding marker */
-            function addMarker(position) {
-                var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
-                /* var image = 'https://img.icons8.com/color/96/000000/marker.png'; */
-                var content = '<h1>Annas crib</h1>';
-                var beachMarker = new google.maps.Marker({ position, map, icon: image });
-                var infoWindow = new google.maps.InfoWindow({ content });
-
-                beachMarker.addListener('click', function () {
-                    infoWindow.open(map, beachMarker);
-                });
-
-                /* Checks for custom icon */
-                if (props.icon) {
-                    marker.setimage(props.icon)
-                };
-
-
-            }
-
         };
 
-  
-
-        }
-
-        /* Locations */
-        /* Annas crib = { lat: 59.353810, lng: 18.088570 }; */
-
-
+       
         // Function for zooming in
         function zoomIn() {
             map.setZoom(map.getZoom() + 1);
@@ -336,7 +308,6 @@
         }, false);
 
 
-        let deferredPrompt;
 
 
          /* Check if installment is available.
@@ -379,12 +350,12 @@
                 }
             })
 
-        });</script>
-
         });
-
-
+        
     </script>
+
+
+
 
 
     <!--Load the API from the specified URL
@@ -403,7 +374,8 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
 
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBURtwO1YHtI9FvJ_Yno8ULXXaL8XRckJM&callback=initMap"></script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBURtwO1YHtI9FvJ_Yno8ULXXaL8XRckJM&callback=initMap"></script>
 
     <script src="./app.js"></script>
 
