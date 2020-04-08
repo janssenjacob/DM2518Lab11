@@ -1,15 +1,18 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
 
     <link rel="stylesheet" type="text/css" href="styling.css">
-    <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
 
     <title>Lab 1</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,10 +23,11 @@
 </head>
 
 <body>
+    <!--The div element for the header -->
     <div class="container-fluid">
         <div class="text-center">
             <div class="col">
-                <h1 class="display-4" style="color: white;">Lab 1 Demo</h1>
+                <p class="display-3" style="color: white;">HutSpots.</p>
                 <!-- Toggle button for fullscreen -->
                 <button id="goFS" class="btn btn-light mb-2">Go fullscreen</button>
                 <button id="installButton" class="btn btn-light mb-2">Install webapp</button>
@@ -31,24 +35,27 @@
         </div>
         <!--The div element for the map -->
         <div id="map"></div>
-        <div class="text-right mr-2 mt-2">
-            <div class="btn-group-vertical">
-                <button class="btn btn-light mb-2" onclick="zoomIn()">Zoom In</button>
-                <button class="btn btn-light" onclick="zoomOut()">Zoom Out</button>
+
+
+        <div class="row justify-content-between">
+
+            <div class="ml-2 mt-2 btn-group-vertical">
+                <p class="h4" style="color: white">Pin it!</p>
+                    <input class="mb-2" id="pinState" type="checkbox" data-toggle="toggle">
+                <p class="h4" checked style="color: white">Stop tracker</p>
+                    <input type="checkbox" id="trackerState">
+                <button class="btn btn-light mt-4" onclick="pinnedPlaces()">My Locations</button>
+            </div>
+
+            <div class="text-right mr-2 mt-2">
+                <div class="btn-group-vertical">
+                    <button class="btn btn-light mb-2" onclick="zoomIn()">Zoom In</button>
+                    <button class="btn btn-light" onclick="zoomOut()">Zoom Out</button>
+                </div>
             </div>
         </div>
 
-        <div id="sidebar" class="col-0">
-            <div class="row">
-                <h3><span class="glyphicon glyphicon-map-marker"></span></h3>
-            </div>
-            <p style="margin-top: .5em;">
-                <button type="submit" class="btn btn-warning" id="startPinning"> Pin a place
-                <span class="glyphicon glyphicon-pushpin"></button>
-                <button type="submit" class="btn btn-danger" id="stopTracking"> Stop tracking </button>
-                <span id="btn"></span>
-            </p>
-        </div>
+       
 
         <div class="text-center">
             <div class="d-inline-block icon">
@@ -70,19 +77,25 @@
                 </div>
             </div>
         </div>
-        <div class="text-right mr-2 mt-2">
-            <div class="btn-group-horizontal text-center">
-                <button class="btn btn-light mr-1" onclick="setSatellite()">Satellite</button>
-                <button class="btn btn-light mr-1" onclick="setRoad()">Road</button>
-                <button class="btn btn-light mr-1" onclick="setTerrain()">Terrain</button>
-                <button class="btn btn-light" onclick="setHybrid()">Hybrid</button>
-            </div>
-        </div>
     </div>
 
 
 
-    <script>var origo, map, infoWindow;
+    <script>var origo, map, infoWindow, beachMarker;
+
+
+
+        $('#pinState').change(function () {
+            /* alert($(this).prop('checked')) for testing */
+            alert('Click anywhere on the map to place a new marker. Pin that favorite bar, perfect place for fika or newly discovered look-out spot!')
+        })
+
+
+        $('#trackerState').change(function () {
+            /* alert($(this).prop('checked')) for testing */
+            alert('Your location will now be hidden. Are you ready for your next adventure?')
+        }) 
+  
 
         /* Initialize and add the map */
         function initMap() {
@@ -93,11 +106,7 @@
 
             /* Creating the map */
             map = new google.maps.Map(
-                document.getElementById('map'), {
-                zoom: 11,
-                center: origo,
-                disableDefaultUI: true
-            });
+                document.getElementById('map'), { zoom: 11, center: origo });
 
             /* Creating infoWindow */
             infoWindow = new google.maps.InfoWindow;
@@ -112,13 +121,15 @@
                     };
 
                     infoWindow.setPosition(pos);
-                    infoWindow.setContent('Your location.');
+                    infoWindow.setContent('Your location');
                     infoWindow.open(map);
                     map.setCenter(pos);
-
+                    trackerState.addEventListener('click', function () {
+                        infoWindow.close()
+                    })
                 }, function () {
-                        handleLocationError(true, infoWindow, map.getCenter());
-      
+                    handleLocationError(true, infoWindow, map.getCenter());
+
                 });
             } else {
                 /* If Browser doesn't support Geolocation */
@@ -134,7 +145,7 @@
                 infoWindow.open(map);
             }
 
-            startPinning.addEventListener('click', function () {
+            pinState.addEventListener('click', function () {
                 google.maps.event.addListener(map, 'click',
                     function (event) {
                         pos = {
@@ -144,22 +155,50 @@
                         addMarker(pos)
                     });
             });
-            /* Listen for click on map to create a marker */
-          
 
         };
-        
-        
-            
-            /* Adding marker */
+
+
+ 
+        function pinnedPlaces() {
+            var image = 'https://img.icons8.com/color/28/000000/marker.png';
+            /*var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';*/
+            var locations = [
+                ['Annas lya', 59.353810, 18.088570, 2],
+                ['Jacobs bo', 59.34564, 18.11124, 1]
+            ];
+
+            var infowindow = new google.maps.InfoWindow();
+
+            var marker, i;
+
+            for (i = 0; i < locations.length; i++) {
+                    marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                    map: map,
+                    icon: image
+                });
+
+                google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                    return function () {
+                        infowindow.setContent(locations[i][0]);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+            }
+
+        }
+
+        /* Adding marker */
         function addMarker(position) {
-            var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
-            /* var image = 'https://img.icons8.com/color/96/000000/marker.png'; */
-            var content = '<h1>Annas crib</h1>';
+            /*var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';*/
+            var image = 'https://img.icons8.com/color/28/000000/marker.png';
+            var content = 'You found a good one!';
+            /* var content = ['You found a good one!', 'Love this place!', 'That is a great spot', 'Wow']; */
             var beachMarker = new google.maps.Marker({ position, map, icon: image });
             var infoWindow = new google.maps.InfoWindow({ content });
 
-              
+
             beachMarker.addListener('click', function () {
                 infoWindow.open(map, beachMarker);
             });
@@ -169,11 +208,8 @@
                 marker.setimage(props.icon)
             }
         };
-        
 
-        /* Locations */
-        /* Annas crib = { lat: 59.353810, lng: 18.088570 }; */
-
+  
 
         // Function for zooming in
         function zoomIn() {
@@ -182,29 +218,6 @@
         // Function for zooming out
         function zoomOut() {
             map.setZoom(map.getZoom() - 1);
-        }
-
-
-
-        // Function for zooming in
-        function zoomIn() {
-            map.setZoom(map.getZoom() + 1);
-        }
-        // Function for zooming out
-        function zoomOut() {
-            map.setZoom(map.getZoom() - 1);
-        }
-        function setSatellite() {
-            map.setMapTypeId('satellite');
-        }
-        function setRoad() {
-            map.setMapTypeId('roadmap');
-        }
-        function setTerrain() {
-            map.setMapTypeId('terrain');
-        }
-        function setHybrid() {
-            map.setMapTypeId('hybrid');
         }
 
         /**
@@ -242,6 +255,7 @@
         });
 
 
+
         /**
          * Hide fullscreen button if webapp launched from homescreen.
          */
@@ -250,18 +264,6 @@
         }
 
         /**
-
-
-        /**
-         * Hide fullscreen button if webapp launched from homescreen.
-         */
-        if (navigator.standalone == true) {
-            document.getElementById("goFS").style.visibility = "hidden";
-            document.getElementById("installButton").style.visibility = "hidden";
-        }
-
-        /**
-
          * Go fullscreen function.
          */
         var goFS = document.getElementById("goFS");
@@ -276,13 +278,7 @@
         }, false);
 
         /**
-
          *
-         */
-        let deferredPrompt;
-
-
-         /* Check if installment is available.
          */
         let deferredPrompt;
 
@@ -291,7 +287,6 @@
             e.preventDefault();
             // Stash the event so it can be triggered later.
             deferredPrompt = e;
-
             // Update UI notify the user they can install the PWA
             showInstallPromotion();
         });
@@ -300,17 +295,6 @@
         buttonInstall.addEventListener('click', (e) => {
             // Hide the app provided install promotion
             hideMyInstallPromotion();
-
-            if (deferredPrompt) {
-                document.getElementById("installButton").visibility = "visible";
-            }
-        });
-        /**
-         * Install webapp if installButton is clicked.
-         */
-        var buttonInstall = document.getElementById("installButton");
-        buttonInstall.addEventListener('click', (e) => {
-
             // Show the install prompt
             deferredPrompt.prompt();
             // Wait for the user to respond to the prompt
@@ -321,14 +305,7 @@
                     console.log('User dismissed the install prompt');
                 }
             })
-
         });</script>
-
-        });
-
-
-    </script>
-
 
     <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads
@@ -347,13 +324,8 @@
             crossorigin="anonymous"></script>
 
     <script async defer
-
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBURtwO1YHtI9FvJ_Yno8ULXXaL8XRckJM&callback=initMap"></script>
 
-
-
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBURtwO1YHtI9FvJ_Yno8ULXXaL8XRckJM&callback=initMap"></script>
-    <script src="./app.js"></script>
 
 </body>
 
